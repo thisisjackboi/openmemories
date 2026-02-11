@@ -1,22 +1,24 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, Link, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { Heart, Map as MapIcon, Calendar, PlusCircle, User, Award } from 'lucide-react';
-import Dashboard from './pages/Dashboard';
-import MapPage from './pages/MapPage';
-import Timeline from './pages/Timeline';
-import AddMemory from './pages/AddMemory';
-import MemoryDetail from './pages/MemoryDetail';
-import Onboarding from './pages/Onboarding';
-import PartnerConnect from './pages/PartnerConnect';
-import Milestones from './pages/Milestones';
-import Profile from './pages/Profile';
-import SettingsPage from './pages/Settings';
-import Splash from './pages/Splash';
-import Signup from './pages/Signup';
-import Login from './pages/Login';
 import { AppState, Memory } from './types';
 import { supabase } from './services/supabase';
+
+// Lazy load all page components for better code-splitting
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const MapPage = lazy(() => import('./pages/MapPage'));
+const Timeline = lazy(() => import('./pages/Timeline'));
+const AddMemory = lazy(() => import('./pages/AddMemory'));
+const MemoryDetail = lazy(() => import('./pages/MemoryDetail'));
+const Onboarding = lazy(() => import('./pages/Onboarding'));
+const PartnerConnect = lazy(() => import('./pages/PartnerConnect'));
+const Milestones = lazy(() => import('./pages/Milestones'));
+const Profile = lazy(() => import('./pages/Profile'));
+const SettingsPage = lazy(() => import('./pages/Settings'));
+const Splash = lazy(() => import('./pages/Splash'));
+const Signup = lazy(() => import('./pages/Signup'));
+const Login = lazy(() => import('./pages/Login'));
 
 const INITIAL_DATA: AppState = {
   partner1: "Ayaan",
@@ -46,6 +48,38 @@ const INITIAL_DATA: AppState = {
   ]
 };
 
+// Protected Route Component - Ensures user is authenticated
+const ProtectedRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+    };
+    checkAuth();
+  }, []);
+
+  // Show loading while checking authentication
+  if (isAuthenticated === null) {
+    return (
+      <div className="h-screen bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center">
+        <div className="text-center">
+          <Heart className="w-16 h-16 text-pink-400 animate-pulse mx-auto mb-4" />
+          <p className="text-slate-600 font-semibold text-lg">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect to onboarding if not authenticated (they'll see welcome screens, then can choose login/signup)
+  if (!isAuthenticated) {
+    return <Navigate to="/onboarding" replace />;
+  }
+
+  return children;
+};
+
 const AppRoutes: React.FC<{ 
   state: AppState, 
   hasCompletedOnboarding: boolean, 
@@ -56,25 +90,79 @@ const AppRoutes: React.FC<{
   resetApp: () => void
 }> = ({ state, hasCompletedOnboarding, completeOnboarding, addMemory, deleteMemory, updateProfile, resetApp }) => {
   return (
-    <Routes>
-      <Route path="/splash" element={<Splash />} />
-      <Route path="/onboarding" element={<Onboarding onComplete={completeOnboarding} />} />
-      <Route path="/signup" element={<Signup onComplete={completeOnboarding} />} />
-      <Route path="/login" element={<Login onComplete={completeOnboarding} />} />
-      
-      <Route path="/" element={!hasCompletedOnboarding ? <Navigate to="/splash" /> : <Dashboard state={state} />} />
-      
-      <Route path="/partner-connect" element={<PartnerConnect />} />
-      <Route path="/map" element={<MapPage memories={state.memories} />} />
-      <Route path="/timeline" element={<Timeline memories={state.memories} />} />
-      <Route path="/add" element={<AddMemory onAdd={addMemory} />} />
-      <Route path="/memory/:id" element={<MemoryDetail memories={state.memories} onDelete={deleteMemory} />} />
-      <Route path="/milestones" element={<Milestones state={state} />} />
-      <Route path="/profile" element={<Profile state={state} onUpdate={updateProfile} />} />
-      <Route path="/settings" element={<SettingsPage state={state} onUpdate={updateProfile} onReset={resetApp} />} />
-      
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
+    <Suspense fallback={
+      <div className="h-screen bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center">
+        <div className="text-center">
+          <Heart className="w-16 h-16 text-pink-400 animate-pulse mx-auto mb-4" />
+          <p className="text-slate-600 font-semibold text-lg">Loading your love story...</p>
+        </div>
+      </div>
+    }>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/splash" element={<Splash />} />
+        <Route path="/onboarding" element={<Onboarding onComplete={completeOnboarding} />} />
+        <Route path="/signup" element={<Signup onComplete={completeOnboarding} />} />
+        <Route path="/login" element={<Login onComplete={completeOnboarding} />} />
+        
+        {/* Protected Routes - Require Authentication */}
+        <Route path="/" element={
+          <ProtectedRoute>
+            {!hasCompletedOnboarding ? <Navigate to="/splash" /> : <Dashboard state={state} />}
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/partner-connect" element={
+          <ProtectedRoute>
+            <PartnerConnect />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/map" element={
+          <ProtectedRoute>
+            <MapPage memories={state.memories} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/timeline" element={
+          <ProtectedRoute>
+            <Timeline memories={state.memories} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/add" element={
+          <ProtectedRoute>
+            <AddMemory onAdd={addMemory} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/memory/:id" element={
+          <ProtectedRoute>
+            <MemoryDetail memories={state.memories} onDelete={deleteMemory} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/milestones" element={
+          <ProtectedRoute>
+            <Milestones state={state} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <Profile state={state} onUpdate={updateProfile} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/settings" element={
+          <ProtectedRoute>
+            <SettingsPage state={state} onUpdate={updateProfile} onReset={resetApp} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Suspense>
   );
 };
 

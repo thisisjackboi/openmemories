@@ -41,7 +41,18 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   };
 
   return (
-    <div className={`h-screen flex flex-col items-center justify-between p-8 transition-colors duration-500 ${SCREENS[step].color}`}>
+    <div className={`h-screen flex flex-col items-center justify-between p-8 transition-colors duration-500 ${SCREENS[step].color} relative`}>
+      
+      {/* Skip Button - Only show on first screens, not on the final screen */}
+      {step < SCREENS.length - 1 && (
+        <button 
+          onClick={() => setStep(SCREENS.length - 1)}
+          className="absolute top-6 right-6 bg-white text-slate-700 font-black uppercase text-xs tracking-widest px-4 py-2.5 rounded-full border-[3px] border-slate-700 shadow-[4px_4px_0px_0px_#334155] hover:bg-slate-50 active:translate-y-1 active:shadow-none transition-all z-10"
+        >
+          Skip
+        </button>
+      )}
+
       <div className="flex-1 flex flex-col items-center justify-center text-center space-y-8 animate-in slide-in-from-bottom-10">
         <div className="bg-white p-10 rounded-[3rem] border-[4px] border-slate-700 shadow-[10px_10px_0px_0px_#334155]">
           {SCREENS[step].icon}
@@ -52,19 +63,44 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
         </div>
       </div>
 
-      <div className="w-full max-w-xs pb-12">
+      <div className="w-full max-w-xs pb-12 space-y-4">
         <div className="flex justify-center gap-2 mb-8">
           {SCREENS.map((_, i) => (
             <div key={i} className={`h-3 rounded-full transition-all duration-300 ${i === step ? 'w-10 bg-slate-700' : 'w-3 bg-slate-700/20'}`} />
           ))}
         </div>
-        <button 
-          onClick={next}
-          className="w-full bg-slate-700 text-white font-black uppercase tracking-widest py-5 rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(255,255,255,0.3)] flex items-center justify-center gap-2 group active:translate-y-1 active:shadow-none transition-all"
-        >
-          {step === SCREENS.length - 1 ? 'Start Our Journey' : 'Next'}
-          <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-        </button>
+        
+        {step === SCREENS.length - 1 ? (
+          <>
+            <button 
+              onClick={() => navigate('/signup')}
+              className="w-full bg-slate-700 text-white font-black uppercase tracking-widest py-5 rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(255,255,255,0.3)] flex items-center justify-center gap-2 group active:translate-y-1 active:shadow-none transition-all"
+            >
+              Create Account
+              <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+            </button>
+            
+            <div className="text-center">
+              <p className="text-slate-600 font-medium text-sm mb-3">
+                Already have an account?
+              </p>
+              <button 
+                onClick={() => navigate('/login')}
+                className="text-slate-800 font-black text-lg underline decoration-4 decoration-slate-700 underline-offset-4 hover:text-slate-600 hover:decoration-slate-500 transition-all uppercase tracking-wide"
+              >
+                Login Here
+              </button>
+            </div>
+          </>
+        ) : (
+          <button 
+            onClick={next}
+            className="w-full bg-slate-700 text-white font-black uppercase tracking-widest py-5 rounded-[2rem] shadow-[6px_6px_0px_0px_rgba(255,255,255,0.3)] flex items-center justify-center gap-2 group active:translate-y-1 active:shadow-none transition-all"
+          >
+            Next
+            <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+          </button>
+        )}
       </div>
     </div>
   );
