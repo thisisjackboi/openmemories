@@ -1,0 +1,127 @@
+/* 
+  🔥 ANTIGRAVITY PROMPT — Full Night Romance UI Transformation
+  Overrides default neobrutalist styles with a romantic glassmorphism theme.
+*/
+
+/* Global Transitions */
+body {
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
+}
+
+/* Midnight Background */
+body.night-romance {
+  background: radial-gradient(
+    circle at 50% 20%,
+    #1e1b4b 0%,   /* deep indigo */
+    #0f172a 40%,  /* slate 900 */
+    #020617 100%  /* slate 950 */
+  ) !important;
+  min-height: 100vh;
+  color: #e2e8f0;
+}
+
+/* Glassmorphism Cards Container Override */
+body.night-romance .cartoon-card,
+body.night-romance .bg-white {
+  background: rgba(15, 23, 42, 0.4) !important; /* Darker, more glass-like */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(148, 163, 184, 0.1) !important; /* Cool slate border */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6) !important;
+  border-radius: 24px;
+}
+
+/* Typography Color Adjustments - Cooler Tones */
+body.night-romance .text-slate-700,
+body.night-romance .text-gray-700,
+body.night-romance h1,
+body.night-romance h2,
+body.night-romance h3 {
+  color: #f1f5f9 !important; /* Cool white */
+  text-shadow: 0 0 10px rgba(148, 163, 184, 0.2);
+}
+
+body.night-romance .text-rose-400 {
+  color: #818cf8 !important; /* Indigo/Violet accent instead of Pink */
+  text-shadow: 0 0 8px rgba(129, 140, 248, 0.4);
+}
+
+/* Buttons & Interactive Elements - Deep Midnight Blue/Violet */
+body.night-romance button,
+body.night-romance .bg-blush {
+  background: linear-gradient(
+    135deg,
+    #312e81 0%,   /* Indigo 900 */
+    #4338ca 50%,  /* Indigo 700 */
+    #6366f1 100%  /* Indigo 500 */
+  ) !important;
+  border: 1px solid rgba(165, 180, 252, 0.2) !important;
+  box-shadow: 0 0 20px rgba(67, 56, 202, 0.3) !important;
+  color: #fff !important;
+}
+
+body.night-romance button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.5) !important;
+}
+
+/* Icons styling - Cool Blue/White Glow */
+body.night-romance svg {
+  color: #a5b4fc !important; /* Soft Indigo */
+  filter: drop-shadow(0 0 4px rgba(165, 180, 252, 0.4));
+}
+
+/* Navigation Bar - Deep Glass */
+body.night-romance nav {
+  background: rgba(2, 6, 23, 0.85) !important;
+  border-color: rgba(148, 163, 184, 0.1) !important;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.4) !important;
+}
+
+body.night-romance nav a.text-\[\#FF7FA9\] {
+  color: #818cf8 !important; /* Active state indigo */
+  filter: drop-shadow(0 0 6px rgba(129, 140, 248, 0.6));
+}
+
+/* Inputs and Forms */
+body.night-romance input,
+body.night-romance textarea,
+body.night-romance select {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+  color: #f8fafc !important;
+}
+
+body.night-romance input::placeholder {
+  color: rgba(148, 163, 184, 0.5) !important;
+}
+
+/* Scrollbar */
+body.night-romance::-webkit-scrollbar-track {
+  background: #020617;
+}
+body.night-romance::-webkit-scrollbar-thumb {
+  background: #312e81;
+  border-radius: 10px;
+}
+
+/* Avatars/Images Borders */
+body.night-romance .border-slate-700 {
+  border-color: rgba(148, 163, 184, 0.3) !important;
+}
+
+body.night-romance .bg-slate-50 {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+  border-color: rgba(148, 163, 184, 0.1) !important;
+}
+
+/* Toggles */
+body.night-romance .peer-checked\:bg-rose-400 {
+  background-color: #6366f1 !important; /* Indigo Toggle */
+}
+
+body.night-romance .bg-slate-200 {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}

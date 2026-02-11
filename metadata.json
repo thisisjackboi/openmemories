@@ -1,0 +1,9 @@
+
+{
+  "name": "Memory Lane: Our Little World",
+  "description": "A whimsical, cartoonish app for couples to track their relationship journey through a memory map, timeline, and photo journal.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}

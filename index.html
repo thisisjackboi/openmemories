@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memory Lane</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --blush-pink: #FFB6C1;
+        --soft-lavender: #C8A2C8;
+        --sky-blue: #B5EAEA;
+        --cream: #FFF8F0;
+      }
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--cream);
+        color: #334155;
+        overflow-x: hidden;
+      }
+      h1, h2, h3, h4 {
+        font-family: 'Baloo 2', cursive;
+      }
+      .cartoon-card {
+        border: 3px solid #334155;
+        border-radius: 28px;
+        box-shadow: 6px 6px 0px 0px #334155;
+      }
+      .polaroid {
+        background: white;
+        padding: 12px 12px 32px 12px;
+        border: 2px solid #334155;
+        box-shadow: 4px 4px 0px 0px #334155;
+        transform: rotate(-2deg);
+      }
+      .heart-bounce {
+        animation: heart-bounce 0.8s infinite alternate;
+      }
+      @keyframes heart-bounce {
+        from { transform: scale(1); }
+        to { transform: scale(1.1); }
+      }
+      .bg-blush { background-color: var(--blush-pink); }
+      .bg-lavender { background-color: var(--soft-lavender); }
+      .bg-sky { background-color: var(--sky-blue); }
+      .bg-cream { background-color: var(--cream); }
+
+      /* Custom scrollbar for better look */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--cream);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 10px;
+      }
+    </style>
+    <script type="importmap">
+    {
+      "imports": {
+        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+        "react/": "https://esm.sh/react@^19.2.4/",
+        "react": "https://esm.sh/react@^19.2.4",
+        "@google/genai": "https://esm.sh/@google/genai@^1.40.0",
+        "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
+        "lucide-react": "https://esm.sh/lucide-react@^0.563.0"
+      }
+    }
+    </script>
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-cream">
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
