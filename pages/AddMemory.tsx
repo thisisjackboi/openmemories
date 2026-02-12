@@ -5,7 +5,7 @@ import { Camera, MapPin, Sparkles, Send, Loader2, Image as ImageIcon } from 'luc
 import { Memory, MemoryCategory } from '../types';
 import { suggestCaption, polishNote } from '../services/geminiService';
 import { supabase } from '../services/supabase';
-
+ // sdhfjhsdj
 interface AddMemoryProps {
   onAdd: (memory: Memory) => void;
 }
